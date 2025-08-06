@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(opengl_gemini_guidance LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 20)
-set(ENV{DISPLAY} "192.168.1.217:0.0") # <--- ADD THIS LINE
-set(ENV{LIBGL_ALWAYS_INDIRECT} "1")             # <--- ADD THIS LINE
+set(ENV{DISPLAY} "192.168.1.217:0.0")
+set(ENV{LIBGL_ALWAYS_INDIRECT} "1")
 
 include(FetchContent)
 
@@ -36,7 +36,5 @@ add_subdirectory(01_blank_window)
 add_subdirectory(02_triangle)
 add_subdirectory(03_coloured_triangle)
 add_subdirectory(04_moving_triangle)
-
-# You would add more subdirectories as you create more demos:
-# add_subdirectory(02_triangle_drawing)
-# add_subdirectory(03_first_shader)
+add_subdirectory(04_rotating_triangle)
+add_subdirectory(05_uniforms_and_transformations)

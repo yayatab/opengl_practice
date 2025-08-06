@@ -4,10 +4,9 @@ layout (location = 1) in vec3 aColor;
 out vec3 ourColor;
 
 uniform float xOffset;
-uniform mat4 transform; //mat4 is matrice of 4x4
 
 void main()
 {
-    gl_Position = transform *  vec4(aPos.x+ xOffset, aPos.y, aPos.z, 1.0);
+    gl_Position = vec4(aPos.x+ xOffset, aPos.y, aPos.z, 1.0);
     ourColor = aColor;
 }

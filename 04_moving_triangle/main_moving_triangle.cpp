@@ -1,12 +1,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <cmath>
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include <fstream>
 #include <sstream>
-#include <valarray>
-#include "gtc/type_ptr.hpp"
 
 /**
  * Handles window resize.
@@ -186,21 +185,13 @@ int main() {
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    glm::mat4 trans = glm::mat4(1.0f);
-
     while (!glfwWindowShouldClose(window)) {
 
-        auto curr_time = static_cast<float>(glfwGetTime());
-        auto radians = glm::radians(curr_time);
-
+        auto curr_time = glfwGetTime();
         glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUniform1f(x_offset, std::sin(curr_time));
-        auto  rotation_location = glGetUniformLocation(shader_program, "transform");
-        trans = glm::rotate(trans, glm::radians(curr_time), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        glUniformMatrix4fv(rotation_location, 1, true, glm::value_ptr(trans));
 
         glUseProgram(shader_program);
         glBindVertexArray(VAO);
