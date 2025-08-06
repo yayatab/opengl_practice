@@ -1,9 +1,17 @@
-# No cmake_minimum_required or project() here
+set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
-# First, create a static library for GLAD
-#add_library(glad_lib STATIC ${GLAD_DIR}/src/glad.c)
-#set_source_files_properties(${GLAD_DIR}/src/glad.c PROPERTIES LANGUAGE C)
-target_include_directories(glad_lib PUBLIC ${GLAD_DIR}/include)
+configure_file(
+        "fragment_shader_source.glsl"
+        "${OUTPUT_DIR}/fragment_shader_source.glsl"
+        COPYONLY
+)
+configure_file(
+        "shader_source.glsl"
+        "${OUTPUT_DIR}/shader_source.glsl"
+        COPYONLY
+)
+
+target_include_directories(glad_lib PUBLIC ${GLAD_DIR}/include} "${GLM_DIR}")
 
 # Now, define your executable
 add_executable(04_moving_triangle main_moving_triangle.cpp)

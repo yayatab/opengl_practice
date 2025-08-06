@@ -70,7 +70,6 @@ int main() {
         return -1;
     }
 
-    // ... rest of your code ... (glfwWindowHint, glfwCreateWindow, etc.)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -156,15 +155,13 @@ int main() {
     glDeleteShader(fragmentShader);
 
 
-    float red = 0.0f;
-    int red_changed = 1;
-    // Loop until the user closes the window
+    float red, green, blue, phase = 0.0f;
+    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
     while (!glfwWindowShouldClose(window)) {
-//        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-//        float randomRed = dist(gen);
 
         // Render here
-        glClearColor(red, 0.3f, 0.3f, 1.0f); // Set background color (dark cyan)
+        glClearColor(red, green, blue, 1.0f); // Set background color (dark cyan)
         glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer
 
         glUseProgram(shaderProgram);
@@ -179,15 +176,11 @@ int main() {
         std::chrono::milliseconds dura(50);
         std::this_thread::sleep_for(dura);
 
-
-        if (red > 1.0f) {
-            red_changed = -1;
-        }
-
-        if (red < 0.0f) {
-            red_changed = 1;
-        }
-        red += 0.01f * red_changed;
+        float curr_time = glfwGetTime();
+        phase = std::abs(std::cos(dist(gen)));
+        red = std::abs(std::sin(curr_time) * phase * 0.1);
+        green = std::abs(std::sin(curr_time) * 0.2);
+        blue = std::abs(std::sin(curr_time) * phase * 0.3);
     }
 
 
