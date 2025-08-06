@@ -14,7 +14,7 @@ include_directories(${GLAD_DIR}/include) # Include GLAD headers globally if comm
 add_library(glad_lib STATIC ${GLAD_DIR}/src/glad.c)
 set_source_files_properties(${GLAD_DIR}/src/glad.c PROPERTIES LANGUAGE C)
 
-set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm" CACHE PATH "Path to glm library")
+set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm" CACHE PATH "Path to glm library") #todo remove this and use FetchContent
 include_directories(${GLM_DIR}/glm) # Include GLAD headers globally if common
 
 #find_package(glm CONFIG REQUIRED)
