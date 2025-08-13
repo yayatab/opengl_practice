@@ -1,12 +1,8 @@
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <valarray>
-#include "gtc/type_ptr.hpp"
 
 /**
  * Handles window resize.
@@ -17,6 +13,25 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
+
+const char* vertexShaderSource = "#version 330 core\n"
+                                 "layout (location = 0) in vec3 aPos;\n"
+                                 "layout (location = 1) in vec3 aColor;\n"
+                                 "out vec3 ourColor;\n"
+                                 "void main()\n"
+                                 "{\n"
+                                 "   gl_Position = vec4(aPos, 1.0);\n"
+                                 "   ourColor = aColor;\n"
+                                 "}\0";
+
+const char* fragmentShaderSource = "#version 330 core\n"
+                                   "out vec4 FragColor;\n"
+                                   "in vec3 ourColor;\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "   FragColor = vec4(ourColor, 1.0f);\n" // Use the interpolated color
+                                   "}\0";
+
 
 void log_shader_error(unsigned int shader_index) {
     int success;
@@ -51,8 +66,6 @@ std::string read_shader_file(const std::string& filename) {
         return "";
     }
 }
-
-
 
 int main() {
 
@@ -96,7 +109,10 @@ int main() {
         return -1;
     }
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, 800, 600); // Initial viewport size
+
+    // now adding colour. red/ blue /green.
+    // so now it's x,y,z,r,g,b
 
     float vertices[] = {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // Left bottom
@@ -126,12 +142,6 @@ int main() {
     auto string_content = read_shader_file("shader_source.glsl"); //todo make const_expr?
     const char* shader_string = string_content.c_str();
 
-    if (string_content.empty()) {
-        std::cerr << "Failed to read shader file" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
     unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &shader_string, NULL);
     glCompileShader(vertex_shader);
@@ -140,12 +150,6 @@ int main() {
 
     auto fragment_shader_source = read_shader_file("fragment_shader_source.glsl"); //todo make const_expr?
     const char* fragment_shader_string = fragment_shader_source.c_str();
-
-    if (fragment_shader_source.empty()) {
-        std::cerr << "Failed to read shader file" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
 
     unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_string, NULL);
@@ -161,43 +165,12 @@ int main() {
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    glm::mat4 model = glm::mat4(1.0f); // init identity matrix 4x4.
-    glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);
-    glm::vec3 camera_target(0.0f, 0.0f, 0.0f);
-    glm::vec3 up_direction(0.0f, 1.0f, 0.0f); //meaning y+ is our world's "up".
-
-
-    glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-    float radius = 2.0f;
-
+    // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
 
-        auto curr_time = static_cast<float>(glfwGetTime());
-        float radians = glm::radians(curr_time * 2.0f);
-
-        glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-        int model_matrix_location = glGetUniformLocation(shader_program, "model");
-        glUniformMatrix4fv(model_matrix_location, 1, GL_FALSE, glm::value_ptr(model));
-
-        glm::mat4 rotation = glm::rotate(model, radians, glm::vec3(0.0f, 0.0f, 1.0f));
-        glUniformMatrix4fv(model_matrix_location, 1, GL_TRUE, glm::value_ptr(rotation));
-
-
-        float cam_x = radius * std::cos(radians);
-        float cam_z = radius * std::cos(radians);
-        camera_pos = glm::vec3(cam_x, 0.0f, cam_z);
-        glm::mat4 view_matrix = glm::lookAt(camera_pos, camera_target, up_direction);
-        int view_matrix_location = glGetUniformLocation(shader_program, "view");
-        glUniformMatrix4fv(view_matrix_location, 1, GL_FALSE, glm::value_ptr(view_matrix));
-
-        int projection_matrix_location = glGetUniformLocation(shader_program, "projection");
-        glUniformMatrix4fv(projection_matrix_location, 1, GL_FALSE, glm::value_ptr(projection_matrix));
-
-
+        // Render here
+        glClearColor(0.0f, 0.3f, 0.3f, 1.0f); // Set background color (dark cyan)
+        glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer
 
         glUseProgram(shader_program);
         glBindVertexArray(VAO);

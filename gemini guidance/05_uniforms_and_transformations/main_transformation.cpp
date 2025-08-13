@@ -1,7 +1,7 @@
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -96,10 +96,7 @@ int main() {
         return -1;
     }
 
-    glViewport(0, 0, 800, 600); // Initial viewport size
-
-    // now adding colour. red/ blue /green.
-    // so now it's x,y,z,r,g,b
+    glViewport(0, 0, 800, 600);
 
     float vertices[] = {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // Left bottom
@@ -161,26 +158,46 @@ int main() {
     glLinkProgram(shader_program);
     log_program_error(shader_program);
 
-    int x_offset = glGetUniformLocation(shader_program, "xOffset");
-
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    glm::mat4 trans = glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f); // init identity matrix 4x4.
+    glm::vec3 camera_pos(0.0f, 0.0f, 3.0f);
+    glm::vec3 camera_target(0.0f, 0.0f, 0.0f);
+    glm::vec3 up_direction(0.0f, 1.0f, 0.0f); //meaning y+ is our world's "up".
+
+
+    glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+    float radius = 2.0f;
 
     while (!glfwWindowShouldClose(window)) {
 
         auto curr_time = static_cast<float>(glfwGetTime());
-        auto radians = glm::radians(curr_time);
+        float radians = glm::radians(curr_time * 2.0f);
 
         glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUniform1f(x_offset, std::sin(curr_time));
-        auto  rotation_location = glGetUniformLocation(shader_program, "transform");
-        trans = glm::rotate(trans, glm::radians(curr_time), glm::vec3(0.0f, 0.0f, 1.0f));
 
-        glUniformMatrix4fv(rotation_location, 1, true, glm::value_ptr(trans));
+        int model_matrix_location = glGetUniformLocation(shader_program, "model");
+        glUniformMatrix4fv(model_matrix_location, 1, GL_FALSE, glm::value_ptr(model));
+
+        glm::mat4 rotation = glm::rotate(model, radians, glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(model_matrix_location, 1, GL_TRUE, glm::value_ptr(rotation));
+
+
+        float cam_x = radius * std::cos(radians);
+        float cam_z = radius * std::cos(radians);
+        camera_pos = glm::vec3(cam_x, 0.0f, cam_z);
+        glm::mat4 view_matrix = glm::lookAt(camera_pos, camera_target, up_direction);
+        int view_matrix_location = glGetUniformLocation(shader_program, "view");
+        glUniformMatrix4fv(view_matrix_location, 1, GL_FALSE, glm::value_ptr(view_matrix));
+
+        int projection_matrix_location = glGetUniformLocation(shader_program, "projection");
+        glUniformMatrix4fv(projection_matrix_location, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+
 
         glUseProgram(shader_program);
         glBindVertexArray(VAO);

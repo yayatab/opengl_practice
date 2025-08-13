@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
@@ -94,11 +94,12 @@ int main() {
 
     glViewport(0, 0, 800, 600);
 
-    std::array<float, 24> vertices = {
-            -0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 0.0f, // Left bottom
-            0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f, // Right bottom
-            0.25f, 0.25f, 0.0f, 0.0f, 0.0f, 1.0f,  // Left Top
-            -0.25f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f,  // Right Top
+    // (X, Y, Z, R, G, B, U, V). U/V are texture coordinates
+    std::array<float, 32> vertices = {
+            -0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.1f, // Left bottom
+            0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.1f, // Right bottom
+            0.25f, 0.25f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.1f,  // Left Top
+            -0.25f, 0.25f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.1f,  // Right Top
     };
 
     std::array<unsigned int, 6> indices = {0, 1, 2, 0, 2, 3};
@@ -118,12 +119,16 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
 
-    //colour attributes
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+
 
     glBindVertexArray(0);
 
