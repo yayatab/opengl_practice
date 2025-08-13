@@ -31,12 +31,4 @@ include_directories(${GLM_DIR}/glm) # Include GLAD headers globally if common
 add_executable(GeneralApp main.cpp)
 target_link_libraries(GeneralApp PRIVATE glfw GL) # making sure the linking is good
 
-# Add your subdirectories as separate build modules
-add_subdirectory("gemini guidance/01_blank_window")
-add_subdirectory("gemini guidance/02_triangle")
-add_subdirectory("gemini guidance/03_coloured_triangle")
-add_subdirectory("gemini guidance/04_moving_triangle")
-add_subdirectory("gemini guidance/04_rotating_triangle")
-add_subdirectory("gemini guidance/05_uniforms_and_transformations")
-add_subdirectory("gemini guidance/06_square")
-add_subdirectory("gemini guidance/07_textured_square")
+add_subdirectory("gemini_guidance")
