@@ -13,4 +13,4 @@ configure_file(
 
 add_executable(07_textured_square main_textured_square.cpp)
 
-target_link_libraries(07_textured_square PRIVATE glfw GL glad_lib Xrandr Xi Xxf86vm Xcursor Xinerama dl)
+target_link_libraries(07_textured_square PRIVATE glfw GL glad_lib dl)
