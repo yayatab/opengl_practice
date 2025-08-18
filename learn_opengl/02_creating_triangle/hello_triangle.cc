@@ -120,7 +120,6 @@ int main() {
     glEnableVertexAttribArray(0);
 
 
-
     auto vertex_shader_source = read_shader_file("vertex_shader.glsl"); //todo make const_expr?
     const char* shader_string = vertex_shader_source.c_str();
 
@@ -163,15 +162,12 @@ int main() {
     glDeleteShader(fragment_shader);
 
 
-
-
-
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
 #pragma region rendering_region
 
-        glClearColor(0.5f, 0.3 , 0.4f, 1.0f);
+        glClearColor(0.5f, 0.3, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); // clears the colour buffer
 
         glUseProgram(shader_program);

@@ -15,3 +15,7 @@ configure_file(
 add_executable(a02_hello_triangle hello_triangle.cc)
 
 target_link_libraries(a02_hello_triangle PRIVATE glfw GL glad_lib dl)
+
+add_executable(a02_hello_triangle2 hello_two_triangles.cc)
+
+target_link_libraries(a02_hello_triangle2 PRIVATE glfw GL glad_lib dl)

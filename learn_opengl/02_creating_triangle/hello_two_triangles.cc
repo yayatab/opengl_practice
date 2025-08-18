@@ -26,7 +26,7 @@ std::string read_shader_file(const std::string& filename) {
         std::stringstream shader_stream;
         shader_stream << shader_file.rdbuf();
         return shader_stream.str();
-    } catch (std::ifstream::failure e) {
+    } catch (std::ifstream::failure& e) {
         std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << filename << std::endl;
         return "";
     }
@@ -65,7 +65,7 @@ int main() {
 
     const int width = 800;
     const int height = 600;
-    GLFWwindow* window = glfwCreateWindow(width, height, "Hello Window", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(width, height, "Hello Two Triangle", nullptr, nullptr);
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -93,33 +93,31 @@ int main() {
     //define data
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f, 0.5f, 0.0f
+            0.5f, 0.5f, 0.0f,  // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f,  // bottom left
+            -0.5f, 0.5f, 0.0f   // top left
     };
 
-    /*
-     * for our purpose, we need only one buffer.
-     * but we also could do:
-     * unsigned int vbos[n];
-     * glGenBuffers(n, vbos)
-    */
-    unsigned int VBO, VAO;
+    unsigned int indices[] = {  // note that we start from 0!
+            0, 1, 3,   // first triangle
+            1, 2, 3    // second triangle
+    };
+
+    unsigned int VBO, VAO, EBO;
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     glGenVertexArrays(1, &VAO);
 
     glBindVertexArray(VAO);
 
-    //now binding it. we use array buffer, but there are lots of other types.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    //this copies the buffer data.and tell it to use the current VBO.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
-
-
 
     auto vertex_shader_source = read_shader_file("vertex_shader.glsl"); //todo make const_expr?
     const char* shader_string = vertex_shader_source.c_str();
@@ -163,20 +161,22 @@ int main() {
     glDeleteShader(fragment_shader);
 
 
-
-
+    //uncomment to change shaping. to see the lines.
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
 #pragma region rendering_region
 
-        glClearColor(0.5f, 0.3 , 0.4f, 1.0f);
+        glClearColor(0.5f, 0.3, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); // clears the colour buffer
 
         glUseProgram(shader_program);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
 #pragma endregion
 
