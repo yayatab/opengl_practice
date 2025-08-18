@@ -81,5 +81,7 @@ example image:
 # Topics
 
 1. [Creating window](01_creating_window/creating_window.md)
+2. [Crating triangles](02_creating_triangle/creating_triangle.md)
+3. [Shaders](03_shaders/shaders.md)
 
 [^1]: Citation needed.

@@ -1,2 +1,3 @@
 add_subdirectory(01_creating_window)
 add_subdirectory(02_creating_triangle)
+add_subdirectory(03_shaders)
