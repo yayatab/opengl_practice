@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(opengl_gemini_guidance LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20) # no idea why it uses c++14.
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_COMPILER clang++)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20" ) # -Wall -Wextra")
+
+
 set(ENV{DISPLAY} "192.168.1.217:0.0")
 set(ENV{LIBGL_ALWAYS_INDIRECT} "1")
 

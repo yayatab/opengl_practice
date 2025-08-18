@@ -61,7 +61,7 @@ std::string read_shader_file(const std::string& filename) {
         std::stringstream shader_stream;
         shader_stream << shader_file.rdbuf();
         return shader_stream.str();
-    } catch (std::ifstream::failure e) {
+    } catch (std::ifstream::failure& e) {
         std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << filename << std::endl;
         return "";
     }

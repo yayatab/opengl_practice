@@ -18,6 +18,7 @@ void process_input(GLFWwindow* window) {
 
 int main() {
 
+    std::cout << "C++ Standard: " << __cplusplus << std::endl;
 #pragma region init_region
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

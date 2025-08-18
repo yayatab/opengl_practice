@@ -24,3 +24,4 @@ this is not production code, so there will be clutter.
 - [ ] clean code in the gemini sources
 - [ ] add links in the readme to the code
 - [ ] read and understand what are hte differece bwetween the libraries [GLFW, GLUT, SDL, SFML](learn_opengl/01_creating_window/creating_window.md/#but-first)
+- [ ] read more about [Rasterization](./learn_opengl/02_creating_triangle/creating_triangle.md#rasterization)
