@@ -1,9 +1,6 @@
 #include "tools/shader.h"
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "vec4.hpp"
-#include "fwd.hpp"
-#include "gtc/type_ptr.hpp"
+#include "shader.hh"
+#include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -97,23 +94,12 @@ Shader::~Shader() {
     glDeleteProgram(ID);
 }
 
-template<typename T>
-void Shader::set_uniform_data(const std::string& name, T data) {
-    if constexpr (std::numeric_limits<T>::is_integer) {
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), data);
-    } else if constexpr (std::is_floating_point_v<T>) {
-        glUniform1f(glGetUniformLocation(ID, name.c_str()), data);
-    } else if constexpr (std::is_same_v<T, glm::vec2>) {
-        glUniform2f(glGetUniformLocation(ID, name.c_str()), data.x, data.y);
-    } else if constexpr (std::is_same_v<T, glm::vec3>) {
-        glUniform3f(glGetUniformLocation(ID, name.c_str()), data.x, data.y, data.z);
-    } else if constexpr (std::is_same_v<T, glm::vec4>) {
-        glUniform4f(glGetUniformLocation(ID, name.c_str()), data.x, data.y, data.z, data.w);
-    } else if constexpr (std::is_same_v<T, glm::mat3>) {
-        glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(data));
-    }
-
-}
+template void Shader::set_uniform_data<int>(const std::string&, const int&);
+template void Shader::set_uniform_data<float>(const std::string&, const float&);
+template void Shader::set_uniform_data<glm::vec2>(const std::string&, const glm::vec2&);
+template void Shader::set_uniform_data<glm::vec3>(const std::string&, const glm::vec3&);
+template void Shader::set_uniform_data<glm::vec4>(const std::string&, const glm::vec4&);
+template void Shader::set_uniform_data<glm::mat3>(const std::string&, const glm::mat3&);
 
 
 }

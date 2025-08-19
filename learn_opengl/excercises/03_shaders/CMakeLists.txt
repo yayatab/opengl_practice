@@ -13,24 +13,24 @@ configure_file(
         "${OUTPUT_DIR}/upside_down.frag"
         COPYONLY
 )
-#
-#configure_file(
-#        "vertex_shader_prog_colour.glsl"
-#        "${OUTPUT_DIR}/vertex_shader_prog_colour.glsl"
-#        COPYONLY
-#)
-#
-#configure_file(
-#        "fragment_prog_colour.frag"
-#        "${OUTPUT_DIR}/fragment_prog_colour.frag"
-#        COPYONLY
-#)
 
-add_executable(ex_03_upside_down_triangle upside_down_triangle.cc)
-target_link_libraries(ex_03_upside_down_triangle PRIVATE glfw GL glad_lib dl tools)
+configure_file(
+        "shaders/moving.glsl"
+        "${OUTPUT_DIR}/moving.glsl"
+        COPYONLY
+)
 
-#add_executable(a03_excersize_1 hello_uniforms.cc)
-#target_link_libraries(a03_excersize_1 PRIVATE glfw GL glad_lib dl tools)
+configure_file(
+        "shaders/moving.frag"
+        "${OUTPUT_DIR}/moving.frag"
+        COPYONLY
+)
 
-#add_executable(a03_hello_attributes more_attributes.cc)
-#target_link_libraries(a03_hello_attributes PRIVATE glfw GL glad_lib dl)
+add_executable(ex_0301_upside_down_triangle upside_down_triangle.cc)
+target_link_libraries(ex_0301_upside_down_triangle PRIVATE glfw GL glad_lib dl tools)
+
+add_executable(ex_0302_moving_triangle moving_triangle.cc)
+target_link_libraries(ex_0302_moving_triangle PRIVATE glfw GL glad_lib dl tools)
+# i did two and three in hte same executable :D
+# to ansewr why hte bottom left is black:
+# the interpolated position  is 0.0. which is black.
