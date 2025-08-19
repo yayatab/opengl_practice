@@ -164,6 +164,12 @@ using namespace hello_attributes;
 
         glUseProgram(shader_program); //activating shader
 
+        float time_value = glfwGetTime();
+        float green_value = std::sin(time_value / 2) / 2.f + 0.5f;
+
+        int colourUniformLocation = glGetUniformLocation(shader_program, "ourColor");
+        glUniform4f(colourUniformLocation, 0.0f, green_value, 0.0f, 1.0f);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 

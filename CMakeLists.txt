@@ -33,9 +33,12 @@ include_directories(${GLM_DIR}/glm) # Include GLAD headers globally if common
 #
 #FetchContent_MakeAvailable(glm)
 
-# dummy executable
-add_executable(GeneralApp main.cpp)
-target_link_libraries(GeneralApp PRIVATE glfw GL) # making sure the linking is good
+add_subdirectory(tools)
 
 add_subdirectory(gemini_guidance)
 add_subdirectory(learn_opengl)
+
+# dummy executable
+add_executable(GeneralApp main.cpp)
+target_link_libraries(GeneralApp PRIVATE glfw GL tools) # making sure the linking is good
+
