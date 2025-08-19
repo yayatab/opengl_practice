@@ -1,4 +1,6 @@
-set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/out")
+get_filename_component(CMAKELISTS_NAME "${CMAKE_CURRENT_LIST_FILE}" NAME)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/${CMAKE_CURRENT_LIST_DIR}")
+set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/out/${CMAKE_CURRENT_LIST_DIR}/resources/")
 
 configure_file(
         "shaders/upside_down.glsl"

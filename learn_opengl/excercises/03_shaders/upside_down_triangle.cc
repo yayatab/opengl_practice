@@ -1,9 +1,7 @@
 #include "tools/window.h"
 #include "tools/shader.h"
 #include <glad/glad.h>
-#include <cmath>
 #include <iostream>
-#include <numbers>
 
 
 int main() {
@@ -32,7 +30,7 @@ int main() {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
 
-    auto shader = tools::Shader("out/upside_down.glsl", "out/upside_down.frag");
+    auto shader = tools::Shader("resources/upside_down.glsl", "resources/upside_down.frag");
 
 
     while (!window.should_close()) {

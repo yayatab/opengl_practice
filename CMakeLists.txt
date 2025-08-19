@@ -7,7 +7,6 @@ set(CMAKE_CXX_COMPILER clang++)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20" ) # -Wall -Wextra")
 
-
 set(ENV{DISPLAY} "192.168.1.217:0.0")
 set(ENV{LIBGL_ALWAYS_INDIRECT} "1")
 
