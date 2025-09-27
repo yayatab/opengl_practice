@@ -6,7 +6,9 @@
 
 * [But first](#but-first)
     * [Graphic Pipeline](#graphic-pipeline)
-    * [GLAD](#glad)
+      * [Vertex Input](#vertex-input)
+      * [Vertex Shader](#vertex-shader)
+      *
 * [Hello Window](#hello-window)
 
 # But first...
@@ -250,6 +252,7 @@ float vertices[] = {
     -0.5f,  0.5f, 0.0f   // top left
 }; 
 ```
+
 we can see that there is some overlap between the two.
 what we could do instead is use four vertices, and then tell openGl what are the triangles!
 
@@ -283,6 +286,7 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 ```
+
 `glDrawElements` is as same as before, but this time we are drawing *6* vertices. (look at the indices)
 
 the relationship between *VAO*, *VBO*, and *EBO* looks like that:
@@ -302,18 +306,16 @@ glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 // 4. then set the vertex attributes pointers
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-glEnableVertexAttribArray(0);  
+glEnableVertexAttribArray(0);
 
 [...]
-  
+
 // ..:: Drawing code (in render loop) :: ..
 glUseProgram(shaderProgram);
 glBindVertexArray(VAO);
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 glBindVertexArray(0);
 ```
-
-
 
 [^1]: 3D Coordinates
 [^2]: see [input](#input)

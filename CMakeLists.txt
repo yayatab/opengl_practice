@@ -19,6 +19,13 @@ include_directories(${GLAD_DIR}/include) # Include GLAD headers globally if comm
 add_library(glad_lib STATIC ${GLAD_DIR}/src/glad.c)
 set_source_files_properties(${GLAD_DIR}/src/glad.c PROPERTIES LANGUAGE C)
 
+set(STB_DIR "${CMAKE_SOURCE_DIR}/libs/STB" CACHE PATH "Path to STB library")
+include_directories(${STB_DIR}/include) # Include GLAD headers globally if common
+
+add_library(stb_lib STATIC ${STB_DIR}/src/stb_image.cc)
+set_source_files_properties(${STB_DIR}/src/stb_image.cc PROPERTIES LANGUAGE CXX)
+
+
 set(GLM_DIR "${CMAKE_SOURCE_DIR}/libs/glm" CACHE PATH "Path to glm library") #todo remove this and use FetchContent
 include_directories(${GLM_DIR}/glm) # Include GLAD headers globally if common
 
