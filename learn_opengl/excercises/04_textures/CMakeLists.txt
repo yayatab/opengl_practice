@@ -34,8 +34,13 @@ configure_file(
 )
 
 
-add_executable(04_textures_01_box ./01_texture.cc)
-target_link_libraries(04_textures_01_box PRIVATE glfw GL glad_lib dl tools stb_lib)
+add_executable(ex_0401_only_smily_straight ./01_smiley.cc)
+target_link_libraries(ex_0401_only_smily_straight PRIVATE glfw GL glad_lib dl tools stb_lib)
 
-add_executable(04_textures_02_smiley 02_smiley.cc)
-target_link_libraries(04_textures_02_smiley PRIVATE glfw GL glad_lib dl tools stb_lib)
+
+add_executable(ex_0402_wrapping ./02_texture_wrapping.cc)
+target_link_libraries(ex_0402_wrapping PRIVATE glfw GL glad_lib dl tools stb_lib)
+
+add_executable(ex_0403_blending ./03_texture_blending.cc)
+target_link_libraries(ex_0403_blending PRIVATE glfw GL glad_lib dl tools stb_lib)
+

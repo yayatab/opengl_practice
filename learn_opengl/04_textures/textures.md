@@ -13,13 +13,12 @@ for a different topic.
 * [Mapping](#mapping)
 * [Texture Wrapping](#texture-wrapping)
 * [Texture Filtering](#texture-filtering)
-*
     * [Mipmaps](#mipmaps)
 * [Loading and creating textures](#loading-and-creating-textures)
 *
     * [Generating a texture](#generating-a-texture)
-*
     * [Applying texture](#applying-texture)
+    * [Texture Units](#texture-units)
 
 # Mapping
 
@@ -196,7 +195,7 @@ glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * s
 glEnableVertexAttribArray(2);
 ```
 
-Nnd now we'll have to change our vertex shader as well:
+And now we'll have to change our vertex shader as well:
 
 ```glsl
 #version 330 core
@@ -222,7 +221,7 @@ want.
 ```glsl
 #version 330 core
 out vec4 FragColor;
-  
+
 in vec3 ourColor;
 in vec2 TexCoord;
 
@@ -242,3 +241,66 @@ glBindTexture(GL_TEXTURE_2D, texture);
 glBindVertexArray(VAO);
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 ```
+
+run 04_textures_01_box and you'll see an amazing woodne colourful box :D
+
+## Texture Units
+
+Via texture units we can use multiple textures in one shader. By assigning units to our sampler, we can bind and
+activate the one we wish to show:
+
+```c
+glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture. 0 is alwyas activated by default. so no need to specifically satete we activate it.
+glBindTexture(GL_TEXTURE_2D, texture);
+```
+
+let's say we want to have two texterus, we'll have to change our fragment into:
+
+```glsl
+#version 330 core
+...
+
+uniform sampler2D texture1;
+uniform sampler2D texture2;
+
+void main()
+{
+    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+}
+```
+
+The final output color is now the combination of two texture lookups. GLSL's built-in mix function takes two values as
+input and linearly interpolates between them based on its third argument. If the third value is 0.0 it returns the first
+input; if it's 1.0 it returns the second input value. A value of 0.2 will return 80% of the first input color and 20% of
+the second input color, resulting in a mixture of both our textures.
+
+```c
+
+unsigned char *data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+if (data)
+{
+                                                             // we use GL_RGBA because it's png. and it has alpha value as well
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+}
+```
+
+to use the second texture as well
+
+```c
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, texture1);
+glActiveTexture(GL_TEXTURE1);
+glBindTexture(GL_TEXTURE_2D, texture2);
+
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
+```
+
+and now before the render loop, we need to assign the textures:
+```c
+ourShader.use(); // don't forget to activate the shader before setting uniforms!  
+glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0); // set it manually
+ourShader.setInt("texture2", 1); // or with shader class
+```
+
